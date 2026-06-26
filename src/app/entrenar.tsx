@@ -3,7 +3,7 @@ import { Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View, Mod
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SymbolView } from 'expo-symbols';
 import { useTheme } from '@/hooks/use-theme';
-import { BottomTabInset, MaxContentWidth, Spacing, Colors } from '@/constants/theme';
+import { BottomTabInset, MaxContentWidth, Spacing, Colors, Layout } from '@/constants/theme';
 import { useResponsive } from '@/hooks/use-responsive';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
@@ -533,7 +533,7 @@ const styles = StyleSheet.create({
   // HERO SECTION (PREVIEW LIGHT THEME)
   heroImageContainer: { height: 400, position: 'relative' },
   heroSafeArea: { flex: 1, zIndex: 10 },
-  heroHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 24, paddingTop: 16 },
+  heroHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: Layout.lg, paddingTop: Layout.sm },
   iconCircle: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: 2 },
   heroHeaderText: { color: '#000', fontSize: 16, fontWeight: '700' },
 
@@ -541,45 +541,45 @@ const styles = StyleSheet.create({
   heroImage: { width: '100%', height: '100%' },
   imageFade: { position: 'absolute', bottom: 0, left: 0, right: 0, height: 100 },
 
-  contentBody: { paddingHorizontal: 24, paddingTop: 16 },
+  contentBody: { paddingHorizontal: Layout.lg, paddingTop: Layout.sm },
   titleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
   heroTitle: { color: '#000', fontSize: 32, fontWeight: '800', lineHeight: 36 },
-  timeBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: 'rgba(0,0,0,0.05)', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16 },
+  timeBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: 'rgba(0,0,0,0.05)', paddingHorizontal: Layout.xs, paddingVertical: 6, borderRadius: 16 },
   timeBadgeText: { color: '#000', fontSize: 12, fontWeight: '700' },
 
   ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 8 },
   ratingText: { color: '#64748b', fontSize: 14, fontWeight: '600' },
   powerPulseText: { color: '#64748b', fontSize: 14, fontStyle: 'italic' },
 
-  infoCardsRow: { flexDirection: 'row', gap: 12, marginTop: 24 },
-  infoCard: { flex: 1, backgroundColor: '#ffffff', borderRadius: 20, padding: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 2 },
+  infoCardsRow: { flexDirection: 'row', gap: Layout.xs, marginTop: Layout.lg },
+  infoCard: { flex: 1, backgroundColor: '#ffffff', borderRadius: 20, padding: Layout.sm, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 2 },
   infoCardHeader: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8 },
   infoCardTitle: { color: '#64748b', fontSize: 12, fontWeight: '600' },
   infoCardValue: { color: '#000', fontSize: 16, fontWeight: '800' },
   infoCardUnit: { fontSize: 12, fontWeight: '500', color: '#64748b' },
 
-  heroDesc: { color: '#64748b', fontSize: 14, lineHeight: 22, marginTop: 24 },
+  heroDesc: { color: '#64748b', fontSize: 14, lineHeight: 22, marginTop: Layout.lg },
 
   joinButton: { marginTop: 32, backgroundColor: '#a855f7', height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center', shadowColor: '#a855f7', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.3, shadowRadius: 16, elevation: 6 },
   joinButtonText: { color: '#ffffff', fontSize: 18, fontWeight: '800' },
 
-  sectionTitle: { color: '#000', fontSize: 18, fontWeight: '800', marginTop: 40, marginBottom: 16 },
-  templatesScroll: { gap: 16, paddingBottom: 20 },
-  smallTemplateCard: { width: 140, height: 110, borderRadius: 24, backgroundColor: '#ffffff', padding: 16, justifyContent: 'space-between', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 2 },
+  sectionTitle: { color: '#000', fontSize: 18, fontWeight: '800', marginTop: 40, marginBottom: Layout.sm },
+  templatesScroll: { gap: Layout.sm, paddingBottom: Layout.md },
+  smallTemplateCard: { width: 140, height: 110, borderRadius: 24, backgroundColor: '#ffffff', padding: Layout.sm, justifyContent: 'space-between', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 2 },
   smallTemplateIconBg: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#f1f5f9', justifyContent: 'center', alignItems: 'center' },
   smallTemplateTitle: { color: '#000', fontSize: 15, fontWeight: '700' },
 
   // ACTIVE WORKOUT (LIGHT THEME)
-  activeArea: { flex: 1, paddingTop: 20 },
-  activeHeader: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 20, marginBottom: 24, gap: 12 },
+  activeArea: { flex: 1, paddingTop: Layout.md },
+  activeHeader: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: Layout.md, marginBottom: Layout.lg, gap: Layout.xs },
   activeTitle: { color: '#64748b', fontSize: 12, fontWeight: '700', textTransform: 'uppercase' },
   activeTitleInput: { color: '#000', fontSize: 24, fontWeight: '800', marginTop: 4 },
-  timerPill: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: '#ffffff', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1 },
+  timerPill: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: '#ffffff', paddingHorizontal: Layout.xs, paddingVertical: 8, borderRadius: 20, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: 1 },
   timerText: { color: '#000', fontSize: 16, fontWeight: '700' },
   discardBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255, 107, 107, 0.1)', justifyContent: 'center', alignItems: 'center' },
 
-  exerciseCard: { backgroundColor: '#ffffff', borderRadius: 24, padding: 16, marginBottom: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 2 },
-  exerciseHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
+  exerciseCard: { backgroundColor: '#ffffff', borderRadius: 24, padding: Layout.sm, marginBottom: Layout.sm, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.03, shadowRadius: 8, elevation: 2 },
+  exerciseHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Layout.sm },
   exerciseName: { color: '#000', fontSize: 18, fontWeight: '800' },
   exerciseMuscle: { color: '#64748b', fontSize: 14, marginTop: 2 },
 
@@ -593,10 +593,10 @@ const styles = StyleSheet.create({
   inputBoxCompleted: { backgroundColor: 'transparent', color: '#a855f7' },
   checkBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: '#f1f5f9', justifyContent: 'center', alignItems: 'center', marginLeft: 8 },
 
-  addSetBtn: { marginTop: 12, alignSelf: 'center', padding: 8 },
+  addSetBtn: { marginTop: Layout.xs, alignSelf: 'center', padding: 8 },
   addSetBtnText: { color: '#64748b', fontSize: 14, fontWeight: '700' },
 
-  actionsContainer: { gap: 12, marginTop: 8, marginBottom: 40 },
+  actionsContainer: { gap: Layout.xs, marginTop: 8, marginBottom: 40 },
   addExBtn: { height: 56, borderRadius: 28, backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: '#e2e8f0' },
   addExBtnText: { color: '#000', fontSize: 16, fontWeight: '700' },
   finishBtn: { height: 56, borderRadius: 28, backgroundColor: '#a855f7', justifyContent: 'center', alignItems: 'center', shadowColor: '#a855f7', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 4 },
@@ -604,29 +604,29 @@ const styles = StyleSheet.create({
 
   // MODALS (LIGHT THEME)
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  modalContent: { backgroundColor: '#ffffff', borderTopLeftRadius: 32, borderTopRightRadius: 32, padding: 24, paddingBottom: 60 },
-  modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
+  modalContent: { backgroundColor: '#ffffff', borderTopLeftRadius: 32, borderTopRightRadius: 32, padding: Layout.lg, paddingBottom: 60 },
+  modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Layout.md },
   modalTitle: { color: '#000', fontSize: 20, fontWeight: '800' },
-  searchContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#f1f5f9', borderRadius: 16, paddingHorizontal: 16, height: 50, marginBottom: 16, gap: 12 },
+  searchContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#f1f5f9', borderRadius: 16, paddingHorizontal: Layout.sm, height: 50, marginBottom: Layout.sm, gap: Layout.xs },
   searchInput: { flex: 1, color: '#000', fontSize: 16, fontWeight: '500' },
   exItem: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: '#f1f5f9' },
   exItemName: { color: '#000', fontSize: 16, fontWeight: '700' },
   exItemMuscle: { color: '#64748b', fontSize: 14, marginTop: 4 },
 
-  modalContentCentered: { backgroundColor: '#ffffff', margin: 24, borderRadius: 32, padding: 32, alignItems: 'center' },
-  successTitle: { color: '#000', fontSize: 24, fontWeight: '800', marginTop: 16 },
-  successDesc: { color: '#64748b', fontSize: 16, marginTop: 4, marginBottom: 24 },
-  statsGrid: { flexDirection: 'row', gap: 12, marginBottom: 32, width: '100%' },
-  statBox: { flex: 1, backgroundColor: '#f1f5f9', padding: 16, borderRadius: 20, alignItems: 'center' },
+  modalContentCentered: { backgroundColor: '#ffffff', margin: Layout.lg, borderRadius: 32, padding: 32, alignItems: 'center' },
+  successTitle: { color: '#000', fontSize: 24, fontWeight: '800', marginTop: Layout.sm },
+  successDesc: { color: '#64748b', fontSize: 16, marginTop: 4, marginBottom: Layout.lg },
+  statsGrid: { flexDirection: 'row', gap: Layout.xs, marginBottom: 32, width: '100%' },
+  statBox: { flex: 1, backgroundColor: '#f1f5f9', padding: Layout.sm, borderRadius: 20, alignItems: 'center' },
   statVal: { color: '#000', fontSize: 18, fontWeight: '800' },
   statLbl: { color: '#64748b', fontSize: 12, marginTop: 4, fontWeight: '600' },
   successBtn: { width: '100%', height: 56, borderRadius: 28, backgroundColor: '#a855f7', justifyContent: 'center', alignItems: 'center' },
   successBtnText: { color: '#ffffff', fontSize: 16, fontWeight: '800' },
 
   // MOBILE-SPECIFIC STYLES
-  activeHeaderMobile: { paddingHorizontal: 16, marginBottom: 12, gap: 8 },
+  activeHeaderMobile: { paddingHorizontal: Layout.sm, marginBottom: Layout.xs, gap: 8 },
   discardBtnMobile: { width: 48, height: 48, borderRadius: 24 },
-  exerciseCardMobile: { padding: 12, marginBottom: 10, borderRadius: 20 },
+  exerciseCardMobile: { padding: Layout.xs, marginBottom: 10, borderRadius: 20 },
   exerciseHeaderMobile: { marginBottom: 10 },
   setRowMobile: { paddingVertical: 6 },
   checkBtnMobile: { width: 48, height: 48, borderRadius: 24 },
@@ -636,9 +636,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    paddingHorizontal: 16,
-    paddingBottom: 24,
-    paddingTop: 12,
+    paddingHorizontal: Layout.sm,
+    paddingBottom: Layout.lg,
+    paddingTop: Layout.xs,
     backgroundColor: 'rgba(240, 253, 244, 0.95)',
     borderTopWidth: 1,
     borderTopColor: 'rgba(0,0,0,0.05)',

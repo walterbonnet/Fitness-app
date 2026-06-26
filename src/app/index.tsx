@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { useTheme } from '@/hooks/use-theme';
-import { BottomTabInset, MaxContentWidth, Spacing, Colors } from '@/constants/theme';
+import { BottomTabInset, MaxContentWidth, Spacing, Colors, Layout } from '@/constants/theme';
 import { useResponsive } from '@/hooks/use-responsive';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
@@ -204,15 +204,15 @@ const styles = StyleSheet.create({
   safeArea: { maxWidth: MaxContentWidth, flexGrow: 1, paddingHorizontal: Spacing.four, gap: Spacing.four, paddingTop: Spacing.three, width: '100%' },
 
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: Spacing.two },
-  headerProfile: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  headerProfile: { flexDirection: 'row', alignItems: 'center', gap: Layout.xs },
   avatar: { width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center' },
   timeText: { fontSize: 12, fontWeight: '600' },
   welcomeText: { fontSize: 20, fontWeight: '800' },
 
-  headerRight: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  headerRight: { flexDirection: 'row', alignItems: 'center', gap: Layout.xs },
   iconCircle: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#ffffff', justifyContent: 'center', alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 4, elevation: 2 },
 
-  aiPillContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#ffffff', borderRadius: 32, padding: 12, gap: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 10, elevation: 3 },
+  aiPillContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#ffffff', borderRadius: 32, padding: Layout.xs, gap: Layout.xs, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 10, elevation: 3 },
   aiIconWrapper: { width: 48, height: 48, borderRadius: 24, justifyContent: 'center', alignItems: 'center' },
   aiSphere: { width: 40, height: 40, borderRadius: 20 },
   aiPillTitle: { color: '#0f172a', fontSize: 16, fontWeight: '800' },
@@ -227,17 +227,17 @@ const styles = StyleSheet.create({
   dayDateUnselected: { width: 48, height: 48, borderRadius: 24, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ffffff', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 4, elevation: 1 },
   dayDate: { fontSize: 16, fontWeight: '600' },
 
-  filtersContainer: { gap: 12, paddingVertical: Spacing.two },
-  filterChip: { paddingHorizontal: 20, paddingVertical: 12, borderRadius: 24, backgroundColor: '#ffffff', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 4, elevation: 1 },
+  filtersContainer: { gap: Layout.xs, paddingVertical: Spacing.two },
+  filterChip: { paddingHorizontal: Layout.md, paddingVertical: Layout.xs, borderRadius: 24, backgroundColor: '#ffffff', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 4, elevation: 1 },
   filterText: { fontSize: 14, fontWeight: '700' },
 
   heroCardPressable: { marginTop: Spacing.two },
   heroCardContainer: { position: 'relative', marginTop: 10 },
-  heroCardStack1: { position: 'absolute', top: -10, left: 16, right: 16, height: 40, backgroundColor: '#a7f3d0', borderRadius: 24, opacity: 0.6 },
+  heroCardStack1: { position: 'absolute', top: -10, left: Layout.sm, right: Layout.sm, height: 40, backgroundColor: '#a7f3d0', borderRadius: 24, opacity: 0.6 },
   heroCardStack2: { position: 'absolute', top: -5, left: 8, right: 8, height: 40, backgroundColor: '#fcd34d', borderRadius: 24, opacity: 0.8 },
-  heroCard: { height: 300, borderRadius: 32, overflow: 'hidden', padding: 24, justifyContent: 'space-between', backgroundColor: '#1e293b' },
+  heroCard: { height: 300, borderRadius: 32, overflow: 'hidden', padding: Layout.lg, justifyContent: 'space-between', backgroundColor: '#1e293b' },
   heroCardTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  glassBadge: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: 'rgba(255,255,255,0.15)', paddingHorizontal: 12, paddingVertical: 8, borderRadius: 20, borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' },
+  glassBadge: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: 'rgba(255,255,255,0.15)', paddingHorizontal: Layout.xs, paddingVertical: 8, borderRadius: 20, borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' },
   badgeText: { color: '#fff', fontSize: 13, fontWeight: '700' },
   glassBadgeIcon: { backgroundColor: 'rgba(255,255,255,0.15)', width: 36, height: 36, borderRadius: 18, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: 'rgba(255,255,255,0.2)' },
 

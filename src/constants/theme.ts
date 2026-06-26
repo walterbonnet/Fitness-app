@@ -67,5 +67,21 @@ export const Spacing = {
   six: 64,
 } as const;
 
+/**
+ * Layout spacing tokens for consistent structural spacing.
+ * Use these for padding, gaps, and margins in layout containers.
+ * 
+ * XS (12px) → Gaps internos, padding badges/pills
+ * SM (16px) → Padding cards, gaps entre elementos, mobile padding
+ * MD (20px) → Padding tablet
+ * LG (24px) → Padding contenedor desktop, spacing entre secciones
+ */
+export const Layout = {
+  xs: 12,
+  sm: 16,
+  md: 20,
+  lg: 24,
+} as const;
+
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
 export const MaxContentWidth = 800;
