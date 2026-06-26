@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import { SymbolView } from 'expo-symbols';
 import { useTheme } from '@/hooks/use-theme';
 import { BottomTabInset, MaxContentWidth, Spacing, Colors } from '@/constants/theme';
+import { useResponsive } from '@/hooks/use-responsive';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   MOCK_HISTORY,
@@ -18,6 +19,7 @@ import {
 export default function HomeScreen() {
   const router = useRouter();
   const theme = useTheme();
+  const { isMobile, screenWidth, horizontalPadding } = useResponsive();
 
   const brandColors = {
     primary: Colors.light.primary, // Purple
@@ -69,7 +71,7 @@ export default function HomeScreen() {
         contentContainerStyle={[styles.contentContainer, contentPlatformStyle]}
         showsVerticalScrollIndicator={false}
       >
-        <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
+        <SafeAreaView style={[styles.safeArea, { paddingHorizontal: horizontalPadding }]} edges={['top', 'left', 'right']}>
 
           {/* Header Section */}
           <View style={styles.header}>
@@ -154,7 +156,7 @@ export default function HomeScreen() {
               <View style={styles.heroCardStack1} />
               <View style={styles.heroCardStack2} />
 
-              <View style={styles.heroCard}>
+              <View style={[styles.heroCard, isMobile && { height: 220, padding: 16 }]}>
                 {/* Hero Background */}
                 <Image
                   source={require('@/assets/images/workout_hero.png')}
@@ -177,8 +179,8 @@ export default function HomeScreen() {
 
                 <View style={styles.heroCardBottom}>
                   <View>
-                    <Text style={styles.heroCardTitle}>La IA Impulsa</Text>
-                    <Text style={styles.heroCardTitle}>Tu Crecimiento</Text>
+                    <Text style={[styles.heroCardTitle, isMobile && { fontSize: 22, lineHeight: 26 }]}>La IA Impulsa</Text>
+                    <Text style={[styles.heroCardTitle, isMobile && { fontSize: 22, lineHeight: 26 }]}>Tu Crecimiento</Text>
                     <Text style={styles.heroCardSubtitle}>Crecimiento muscular inteligente.</Text>
                   </View>
                   <View style={styles.heroActionBtn}>
@@ -199,7 +201,7 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   scrollView: { flex: 1 },
   contentContainer: { flexDirection: 'row', justifyContent: 'center' },
-  safeArea: { maxWidth: MaxContentWidth, flexGrow: 1, paddingHorizontal: Spacing.four, gap: Spacing.four, paddingTop: Spacing.three },
+  safeArea: { maxWidth: MaxContentWidth, flexGrow: 1, paddingHorizontal: Spacing.four, gap: Spacing.four, paddingTop: Spacing.three, width: '100%' },
 
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: Spacing.two },
   headerProfile: { flexDirection: 'row', alignItems: 'center', gap: 12 },

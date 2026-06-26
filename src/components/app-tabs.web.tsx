@@ -14,6 +14,7 @@ import { ThemedText } from './themed-text';
 import { ThemedView } from './themed-view';
 
 import { Colors, MaxContentWidth, Spacing } from '@/constants/theme';
+import { useResponsive } from '@/hooks/use-responsive';
 
 export default function AppTabs() {
   return (
@@ -43,12 +44,20 @@ export default function AppTabs() {
 }
 
 export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps) {
+  const { isMobile } = useResponsive();
+
   return (
     <Pressable {...props} style={({ pressed }) => pressed && styles.pressed}>
       <ThemedView
         type={isFocused ? 'backgroundSelected' : 'backgroundElement'}
-        style={styles.tabButtonView}>
-        <ThemedText type="small" themeColor={isFocused ? 'text' : 'textSecondary'}>
+        style={[
+          styles.tabButtonView,
+          isMobile && styles.tabButtonViewMobile,
+        ]}>
+        <ThemedText
+          type="small"
+          themeColor={isFocused ? 'text' : 'textSecondary'}
+          style={isMobile ? { fontSize: 11 } : undefined}>
           {children}
         </ThemedText>
       </ThemedView>
@@ -59,26 +68,39 @@ export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps
 export function CustomTabList(props: TabListProps) {
   const scheme = useColorScheme();
   const colors = Colors[scheme === 'unspecified' ? 'light' : scheme];
+  const { isMobile, isTablet } = useResponsive();
 
   return (
-    <View {...props} style={styles.tabListContainer}>
-      <ThemedView type="backgroundElement" style={styles.innerContainer}>
-        <ThemedText type="smallBold" style={styles.brandText}>
-          ApexFit
-        </ThemedText>
+    <View {...props} style={[styles.tabListContainer, isMobile && styles.tabListContainerMobile]}>
+      <ThemedView
+        type="backgroundElement"
+        style={[
+          styles.innerContainer,
+          isMobile && styles.innerContainerMobile,
+          isTablet && styles.innerContainerTablet,
+        ]}>
+        {/* Hide brand text on mobile to save space */}
+        {!isMobile && (
+          <ThemedText type="smallBold" style={styles.brandText}>
+            ApexFit
+          </ThemedText>
+        )}
 
         {props.children}
 
-        <ExternalLink href="https://docs.expo.dev" asChild>
-          <Pressable style={styles.externalPressable}>
-            <ThemedText type="link">Docs</ThemedText>
-            <SymbolView
-              tintColor={colors.text}
-              name={{ ios: 'arrow.up.right.square', web: 'link' }}
-              size={12}
-            />
-          </Pressable>
-        </ExternalLink>
+        {/* Hide docs link on mobile/tablet */}
+        {!isMobile && !isTablet && (
+          <ExternalLink href="https://docs.expo.dev" asChild>
+            <Pressable style={styles.externalPressable}>
+              <ThemedText type="link">Docs</ThemedText>
+              <SymbolView
+                tintColor={colors.text}
+                name={{ ios: 'arrow.up.right.square', web: 'link' }}
+                size={12}
+              />
+            </Pressable>
+          </ExternalLink>
+        )}
       </ThemedView>
     </View>
   );
@@ -93,6 +115,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
+  tabListContainerMobile: {
+    padding: Spacing.two,
+    bottom: 0,
+  },
   innerContainer: {
     paddingVertical: Spacing.two,
     paddingHorizontal: Spacing.five,
@@ -102,6 +128,16 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     gap: Spacing.two,
     maxWidth: MaxContentWidth,
+  },
+  innerContainerMobile: {
+    paddingHorizontal: Spacing.two,
+    paddingVertical: Spacing.one,
+    gap: Spacing.one,
+    justifyContent: 'space-around',
+  },
+  innerContainerTablet: {
+    paddingHorizontal: Spacing.three,
+    gap: Spacing.one,
   },
   brandText: {
     marginRight: 'auto',
@@ -113,6 +149,11 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.one,
     paddingHorizontal: Spacing.three,
     borderRadius: Spacing.three,
+  },
+  tabButtonViewMobile: {
+    paddingVertical: Spacing.one,
+    paddingHorizontal: Spacing.two,
+    borderRadius: Spacing.two,
   },
   externalPressable: {
     flexDirection: 'row',

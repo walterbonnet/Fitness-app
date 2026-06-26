@@ -13,10 +13,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { SymbolView } from 'expo-symbols';
 import { useTheme } from '@/hooks/use-theme';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { useResponsive } from '@/hooks/use-responsive';
 import { getRestTimerDuration, updateRestTimerDuration } from '@/constants/mockData';
 
 export default function RestTimerScreen() {
   const theme = useTheme();
+  const { isMobile, screenWidth, horizontalPadding } = useResponsive();
   
   // Design colors
   const brandColors = {
@@ -142,7 +144,7 @@ export default function RestTimerScreen() {
         contentContainerStyle={[styles.scrollContent, contentPlatformStyle]}
         showsVerticalScrollIndicator={false}
       >
-        <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
+        <SafeAreaView style={[styles.safeArea, { paddingHorizontal: horizontalPadding }]} edges={['top', 'left', 'right']}>
           {/* Header */}
           <View style={styles.header}>
             <Text style={[styles.title, { color: theme.text }]}>Temporizador</Text>
@@ -158,6 +160,7 @@ export default function RestTimerScreen() {
               { 
                 borderColor: theme.backgroundSelected,
                 shadowColor: isActive ? brandColors.warning : 'transparent',
+                ...(isMobile ? { width: Math.min(220, screenWidth * 0.55), height: Math.min(220, screenWidth * 0.55), borderRadius: Math.min(110, screenWidth * 0.275) } : {}),
               }
             ]}>
               {/* Dynamic Inner Glow Border */}
@@ -170,7 +173,7 @@ export default function RestTimerScreen() {
                 }
               ]} />
               
-              <Text style={[styles.timeDisplay, { color: theme.text }]}>
+              <Text style={[styles.timeDisplay, { color: theme.text }, isMobile && { fontSize: 42 }]}>
                 {formatTime(timeLeft)}
               </Text>
               
@@ -229,7 +232,7 @@ export default function RestTimerScreen() {
           </View>
 
           {/* Preset Buttons */}
-          <View style={styles.presetContainer}>
+          <View style={[styles.presetContainer, isMobile && { flexWrap: 'wrap' }]}>
             {presets.map((preset) => (
               <Pressable
                 key={preset.value}

@@ -13,10 +13,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { SymbolView } from 'expo-symbols';
 import { useTheme } from '@/hooks/use-theme';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { useResponsive } from '@/hooks/use-responsive';
 import { MOCK_EXERCISES, Exercise } from '@/constants/mockData';
 
 export default function ExercisesScreen() {
   const theme = useTheme();
+  const { horizontalPadding } = useResponsive();
 
   // Design colors
   const brandColors = {
@@ -69,7 +71,7 @@ export default function ExercisesScreen() {
         contentContainerStyle={[styles.scrollContent, contentPlatformStyle]}
         showsVerticalScrollIndicator={false}
       >
-        <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
+        <SafeAreaView style={[styles.safeArea, { paddingHorizontal: horizontalPadding }]} edges={['top', 'left', 'right']}>
           {/* Header */}
           <View style={styles.header}>
             <Text style={[styles.title, { color: theme.text }]}>Biblioteca</Text>

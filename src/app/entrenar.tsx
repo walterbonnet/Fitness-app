@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { SymbolView } from 'expo-symbols';
 import { useTheme } from '@/hooks/use-theme';
 import { BottomTabInset, MaxContentWidth, Spacing, Colors } from '@/constants/theme';
+import { useResponsive } from '@/hooks/use-responsive';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   MOCK_EXERCISES,
@@ -29,6 +30,7 @@ const INITIAL_WORKOUT: WorkoutSession = {
 
 export default function WorkoutScreen() {
   const theme = useTheme();
+  const { isMobile, horizontalPadding } = useResponsive();
 
   const brandColors = {
     primary: Colors.light.primary, // Purple
@@ -240,7 +242,7 @@ export default function WorkoutScreen() {
         {/* PREMIUM PREVIEW STATE */}
         {workout.exercises.length === 0 ? (
           <View style={{ flex: 1 }}>
-            <View style={styles.heroImageContainer}>
+            <View style={[styles.heroImageContainer, isMobile && { height: 300 }]}>
               <SafeAreaView edges={['top', 'left', 'right']} style={styles.heroSafeArea}>
                 <View style={styles.heroHeader}>
                   <Pressable style={styles.iconCircle}>
@@ -269,11 +271,11 @@ export default function WorkoutScreen() {
               </SafeAreaView>
             </View>
 
-            <View style={styles.contentBody}>
+            <View style={[styles.contentBody, { paddingHorizontal: horizontalPadding }]}>
               <View style={styles.titleRow}>
                 <View style={{ flex: 1 }}>
-                  <Text style={styles.heroTitle}>Construye Fuerza</Text>
-                  <Text style={styles.heroTitle}>Gana Potencia</Text>
+                  <Text style={[styles.heroTitle, isMobile && { fontSize: 24, lineHeight: 28 }]}>Construye Fuerza</Text>
+                  <Text style={[styles.heroTitle, isMobile && { fontSize: 24, lineHeight: 28 }]}>Gana Potencia</Text>
                 </View>
                 <View style={styles.timeBadge}>
                   <SymbolView name={{ ios: 'clock', android: 'schedule', web: 'schedule' }} size={12} tintColor="#000" />
@@ -288,7 +290,7 @@ export default function WorkoutScreen() {
                 <Text style={styles.powerPulseText}>Pulso de Potencia</Text>
               </View>
 
-              <View style={styles.infoCardsRow}>
+              <View style={[styles.infoCardsRow, isMobile && { gap: 8 }]}>
                 <View style={styles.infoCard}>
                   <View style={styles.infoCardHeader}>
                     <SymbolView name={{ ios: 'flame.fill', android: 'local_fire_department', web: 'local_fire_department' }} size={14} tintColor="#000" />
@@ -347,11 +349,11 @@ export default function WorkoutScreen() {
         ) : (
           /* ACTIVE WORKOUT STATE (Also styled light) */
           <SafeAreaView style={styles.activeArea} edges={['top', 'left', 'right']}>
-            <View style={styles.activeHeader}>
+            <View style={[styles.activeHeader, isMobile && { flexWrap: 'wrap', gap: 8 }]}>
               <View style={{ flex: 1 }}>
                 <Text style={styles.activeTitle}>Entrenando</Text>
                 <TextInput
-                  style={styles.activeTitleInput}
+                  style={[styles.activeTitleInput, isMobile && { fontSize: 18 }]}
                   value={workout.title}
                   onChangeText={(text) => setWorkout(prev => ({ ...prev, title: text }))}
                   placeholderTextColor="#94a3b8"
@@ -369,7 +371,7 @@ export default function WorkoutScreen() {
               </Pressable>
             </View>
 
-            <View style={{ paddingHorizontal: 20 }}>
+            <View style={{ paddingHorizontal: horizontalPadding }}>
               {workout.exercises.map((exercise, exIndex) => (
                 <View key={`${exercise.id}-${exIndex}`} style={styles.exerciseCard}>
                   <View style={styles.exerciseHeader}>
