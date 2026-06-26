@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View, Modal, Image } from 'react-native';
+import { Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View, Modal, Image, KeyboardAvoidingView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SymbolView } from 'expo-symbols';
 import { useTheme } from '@/hooks/use-theme';
@@ -234,10 +234,15 @@ export default function WorkoutScreen() {
         style={StyleSheet.absoluteFill}
       />
 
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
       <ScrollView
-        contentContainerStyle={contentPlatformStyle}
+        contentContainerStyle={[contentPlatformStyle, isMobile && workout.exercises.length > 0 && { paddingBottom: 80 }]}
         showsVerticalScrollIndicator={false}
         bounces={false}
+        keyboardShouldPersistTaps="handled"
       >
         {/* PREMIUM PREVIEW STATE */}
         {workout.exercises.length === 0 ? (
@@ -290,7 +295,7 @@ export default function WorkoutScreen() {
                 <Text style={styles.powerPulseText}>Pulso de Potencia</Text>
               </View>
 
-              <View style={[styles.infoCardsRow, isMobile && { gap: 8 }]}>
+              <View style={[styles.infoCardsRow, isMobile && { gap: 8, marginTop: 16 }]}>
                 <View style={styles.infoCard}>
                   <View style={styles.infoCardHeader}>
                     <SymbolView name={{ ios: 'flame.fill', android: 'local_fire_department', web: 'local_fire_department' }} size={14} tintColor="#000" />
@@ -316,18 +321,18 @@ export default function WorkoutScreen() {
                 </View>
               </View>
 
-              <Text style={styles.heroDesc}>
+              <Text style={[styles.heroDesc, isMobile && { marginTop: 16 }]}>
                 Desbloquea todo tu potencial con esta rutina de cuerpo completo. Diseñada con IA para estimular el crecimiento muscular y fuerza eficientemente.
               </Text>
 
               <Pressable
-                style={styles.joinButton}
+                style={[styles.joinButton, isMobile && { marginTop: 20 }]}
                 onPress={() => loadTemplate(featuredTemplate)}
               >
                 <Text style={styles.joinButtonText}>Unirte Ahora</Text>
               </Pressable>
 
-              <Text style={styles.sectionTitle}>Otras Rutinas</Text>
+              <Text style={[styles.sectionTitle, isMobile && { marginTop: 24, marginBottom: 12 }]}>Otras Rutinas</Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.templatesScroll}>
                 {MOCK_TEMPLATES.slice(1).map(t => (
                   <Pressable key={t.id} style={styles.smallTemplateCard} onPress={() => loadTemplate(t)}>
@@ -349,14 +354,15 @@ export default function WorkoutScreen() {
         ) : (
           /* ACTIVE WORKOUT STATE (Also styled light) */
           <SafeAreaView style={styles.activeArea} edges={['top', 'left', 'right']}>
-            <View style={[styles.activeHeader, isMobile && { flexWrap: 'wrap', gap: 8 }]}>
-              <View style={{ flex: 1 }}>
+            <View style={[styles.activeHeader, isMobile && styles.activeHeaderMobile]}>
+              <View style={{ flex: 1, minWidth: 0 }}>
                 <Text style={styles.activeTitle}>Entrenando</Text>
                 <TextInput
                   style={[styles.activeTitleInput, isMobile && { fontSize: 18 }]}
                   value={workout.title}
                   onChangeText={(text) => setWorkout(prev => ({ ...prev, title: text }))}
                   placeholderTextColor="#94a3b8"
+                  numberOfLines={1}
                 />
               </View>
               <View style={styles.timerPill}>
@@ -365,7 +371,7 @@ export default function WorkoutScreen() {
               </View>
               <Pressable
                 onPress={() => { setWorkout(JSON.parse(JSON.stringify(INITIAL_WORKOUT))); setSecondsElapsed(0); }}
-                style={styles.discardBtn}
+                style={[styles.discardBtn, isMobile && styles.discardBtnMobile]}
               >
                 <SymbolView name={{ ios: 'xmark', android: 'close', web: 'close' }} size={16} tintColor={brandColors.warning} />
               </Pressable>
@@ -373,10 +379,10 @@ export default function WorkoutScreen() {
 
             <View style={{ paddingHorizontal: horizontalPadding }}>
               {workout.exercises.map((exercise, exIndex) => (
-                <View key={`${exercise.id}-${exIndex}`} style={styles.exerciseCard}>
-                  <View style={styles.exerciseHeader}>
+                <View key={`${exercise.id}-${exIndex}`} style={[styles.exerciseCard, isMobile && styles.exerciseCardMobile]}>
+                  <View style={[styles.exerciseHeader, isMobile && styles.exerciseHeaderMobile]}>
                     <View style={{ flex: 1 }}>
-                      <Text style={styles.exerciseName}>{exercise.name}</Text>
+                      <Text style={[styles.exerciseName, isMobile && { fontSize: 16 }]}>{exercise.name}</Text>
                       <Text style={styles.exerciseMuscle}>{exercise.muscleGroup}</Text>
                     </View>
                     <Pressable onPress={() => removeExercise(exIndex)}>
@@ -392,7 +398,7 @@ export default function WorkoutScreen() {
                   </View>
 
                   {exercise.sets.map((set, setIndex) => (
-                    <View key={`${setIndex}-${set.setNumber}`} style={[styles.setRow, set.completed && styles.setRowCompleted]}>
+                    <View key={`${setIndex}-${set.setNumber}`} style={[styles.setRow, isMobile && styles.setRowMobile, set.completed && styles.setRowCompleted]}>
                       <Text style={[styles.rowSetNum, set.completed && { color: brandColors.primary }]}>{set.setNumber}</Text>
 
                       <TextInput
@@ -417,14 +423,14 @@ export default function WorkoutScreen() {
 
                       <Pressable
                         onPress={() => toggleSetCompleted(exIndex, setIndex)}
-                        style={[styles.checkBtn, set.completed && { backgroundColor: brandColors.primary }]}
+                        style={[styles.checkBtn, isMobile && styles.checkBtnMobile, set.completed && { backgroundColor: brandColors.primary }]}
                       >
                         {set.completed && <SymbolView name={{ ios: 'checkmark', android: 'check', web: 'check' }} size={16} tintColor="#fff" />}
                       </Pressable>
                     </View>
                   ))}
 
-                  <Pressable style={styles.addSetBtn} onPress={() => addSet(exIndex)}>
+                  <Pressable style={[styles.addSetBtn, isMobile && styles.addSetBtnMobile]} onPress={() => addSet(exIndex)}>
                     <Text style={styles.addSetBtnText}>+ Agregar Serie</Text>
                   </Pressable>
                 </View>
@@ -434,14 +440,26 @@ export default function WorkoutScreen() {
                 <Pressable style={styles.addExBtn} onPress={() => setShowAddExerciseModal(true)}>
                   <Text style={styles.addExBtnText}>Agregar Ejercicio</Text>
                 </Pressable>
-                <Pressable style={styles.finishBtn} onPress={finishWorkout}>
-                  <Text style={styles.finishBtnText}>Finalizar</Text>
-                </Pressable>
+                {!isMobile && (
+                  <Pressable style={styles.finishBtn} onPress={finishWorkout}>
+                    <Text style={styles.finishBtnText}>Finalizar</Text>
+                  </Pressable>
+                )}
               </View>
             </View>
           </SafeAreaView>
         )}
       </ScrollView>
+      </KeyboardAvoidingView>
+
+      {/* Sticky Finish Button - Mobile Only */}
+      {isMobile && workout.exercises.length > 0 && (
+        <View style={styles.stickyFinishContainer}>
+          <Pressable style={styles.stickyFinishBtn} onPress={finishWorkout}>
+            <Text style={styles.finishBtnText}>Finalizar</Text>
+          </Pressable>
+        </View>
+      )}
 
       {/* Add Exercise Modal (Light) */}
       <Modal animationType="slide" transparent={true} visible={showAddExerciseModal} onRequestClose={() => setShowAddExerciseModal(false)}>
@@ -603,5 +621,38 @@ const styles = StyleSheet.create({
   statVal: { color: '#000', fontSize: 18, fontWeight: '800' },
   statLbl: { color: '#64748b', fontSize: 12, marginTop: 4, fontWeight: '600' },
   successBtn: { width: '100%', height: 56, borderRadius: 28, backgroundColor: '#a855f7', justifyContent: 'center', alignItems: 'center' },
-  successBtnText: { color: '#ffffff', fontSize: 16, fontWeight: '800' }
+  successBtnText: { color: '#ffffff', fontSize: 16, fontWeight: '800' },
+
+  // MOBILE-SPECIFIC STYLES
+  activeHeaderMobile: { paddingHorizontal: 16, marginBottom: 12, gap: 8 },
+  discardBtnMobile: { width: 48, height: 48, borderRadius: 24 },
+  exerciseCardMobile: { padding: 12, marginBottom: 10, borderRadius: 20 },
+  exerciseHeaderMobile: { marginBottom: 10 },
+  setRowMobile: { paddingVertical: 6 },
+  checkBtnMobile: { width: 48, height: 48, borderRadius: 24 },
+  addSetBtnMobile: { minHeight: 48, justifyContent: 'center' },
+  stickyFinishContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingHorizontal: 16,
+    paddingBottom: 24,
+    paddingTop: 12,
+    backgroundColor: 'rgba(240, 253, 244, 0.95)',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.05)',
+  },
+  stickyFinishBtn: {
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#a855f7',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#a855f7',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
 });
