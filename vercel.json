@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/dist/$1" }
+  ],
+  "outputDirectory": "dist",
+  "cleanUrls": true,
+  "trailingSlash": false
+}
