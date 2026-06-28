@@ -194,8 +194,8 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   scrollView: { flex: 1 },
-  contentContainer: { flexDirection: 'row', justifyContent: 'center' },
-  safeArea: { maxWidth: MaxContentWidth, flexGrow: 1, paddingHorizontal: Spacing.four, gap: Spacing.four, paddingTop: Spacing.three, width: '100%' },
+  contentContainer: { width: '100%' },
+  safeArea: { maxWidth: MaxContentWidth, flexGrow: 1, paddingHorizontal: Spacing.four, gap: Spacing.four, paddingTop: Spacing.three, width: '100%', alignSelf: 'center' },
 
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: Spacing.two },
   headerProfile: { flexDirection: 'row', alignItems: 'center', gap: Layout.xs },

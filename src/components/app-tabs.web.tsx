@@ -44,7 +44,8 @@ export default function AppTabs() {
 }
 
 export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps) {
-  const { isMobile } = useResponsive();
+  const { isMobile, screenWidth } = useResponsive();
+  const isExtraSmall = screenWidth < 360;
 
   return (
     <Pressable {...props} style={({ pressed }) => pressed && styles.pressed}>
@@ -53,11 +54,12 @@ export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps
         style={[
           styles.tabButtonView,
           isMobile && styles.tabButtonViewMobile,
+          isExtraSmall && { paddingHorizontal: 6 }
         ]}>
         <ThemedText
           type="small"
           themeColor={isFocused ? 'text' : 'textSecondary'}
-          style={isMobile ? { fontSize: 11 } : undefined}>
+          style={isMobile ? { fontSize: isExtraSmall ? 10 : 11 } : undefined}>
           {children}
         </ThemedText>
       </ThemedView>

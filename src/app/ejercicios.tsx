@@ -371,8 +371,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    width: '100%',
   },
   safeArea: {
     maxWidth: MaxContentWidth,
@@ -380,6 +379,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.four,
     gap: Spacing.four,
     paddingTop: Spacing.three,
+    width: '100%',
+    alignSelf: 'center',
   },
   header: {
     paddingVertical: Spacing.two,
