@@ -15,18 +15,19 @@ import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { useResponsive } from '@/hooks/use-responsive';
 import { MOCK_HISTORY, WorkoutSession, subscribeToHistory } from '@/constants/mockData';
 
+// Module-level constant (avoid recreation on every render)
+const BRAND_COLORS = {
+  primary: '#A3E635', // Neon Green
+  secondary: '#00F0FF', // Cyan
+  accent: '#A855F7', // Purple
+  warning: '#FF6B6B', // Coral
+  cardBg: '#1C1C1E',
+} as const;
+
 export default function HistoryScreen() {
   const theme = useTheme();
   const { horizontalPadding } = useResponsive();
   
-  // Design colors
-  const brandColors = {
-    primary: '#A3E635', // Neon Green
-    secondary: '#00F0FF', // Cyan
-    accent: '#A855F7', // Purple
-    warning: '#FF6B6B', // Coral
-    cardBg: '#1C1C1E',
-  };
 
   const [selectedSession, setSelectedSession] = useState<WorkoutSession | null>(null);
   const [history, setHistory] = useState<WorkoutSession[]>(MOCK_HISTORY);
@@ -73,7 +74,7 @@ export default function HistoryScreen() {
                 <SymbolView 
                   name={{ ios: 'calendar', android: 'calendar_today', web: 'calendar_today' }} 
                   size={40} 
-                  tintColor={brandColors.secondary} 
+                  tintColor={BRAND_COLORS.secondary} 
                 />
               </View>
               <Text style={[styles.emptyTitle, { color: theme.text }]}>Historial Vacío</Text>
@@ -111,7 +112,7 @@ export default function HistoryScreen() {
                       <SymbolView 
                         name={{ ios: 'clock', android: 'schedule', web: 'schedule' }} 
                         size={12} 
-                        tintColor={brandColors.secondary} 
+                        tintColor={BRAND_COLORS.secondary} 
                       />
                       <Text style={[styles.infoVal, { color: theme.text }]}>{session.durationMinutes} min</Text>
                     </View>
@@ -119,7 +120,7 @@ export default function HistoryScreen() {
                       <SymbolView 
                         name={{ ios: 'dumbbell.fill', android: 'fitness_center', web: 'fitness_center' }} 
                         size={12} 
-                        tintColor={brandColors.primary} 
+                        tintColor={BRAND_COLORS.primary} 
                       />
                       <Text style={[styles.infoVal, { color: theme.text }]}>{session.volumeKg} kg</Text>
                     </View>
@@ -127,7 +128,7 @@ export default function HistoryScreen() {
                       <SymbolView 
                         name={{ ios: 'list.bullet', android: 'list', web: 'list' }} 
                         size={12} 
-                        tintColor={brandColors.accent} 
+                        tintColor={BRAND_COLORS.accent} 
                       />
                       <Text style={[styles.infoVal, { color: theme.text }]}>{session.exercisesCount} ejer.</Text>
                     </View>
@@ -203,7 +204,7 @@ export default function HistoryScreen() {
                         <Text style={[styles.modalExerciseName, { color: theme.text }]}>
                           {exercise.name}
                         </Text>
-                        <Text style={[styles.modalExerciseMuscle, { color: brandColors.secondary }]}>
+                        <Text style={[styles.modalExerciseMuscle, { color: BRAND_COLORS.secondary }]}>
                           {exercise.muscleGroup}
                         </Text>
                       </View>
@@ -212,7 +213,7 @@ export default function HistoryScreen() {
                       <View style={styles.setsList}>
                         {exercise.sets.map((set, sIndex) => (
                           <View key={sIndex} style={styles.modalSetRow}>
-                            <Text style={[styles.modalSetNum, { color: brandColors.primary }]}>
+                            <Text style={[styles.modalSetNum, { color: BRAND_COLORS.primary }]}>
                               S{set.setNumber}
                             </Text>
                             <Text style={[styles.modalSetInfo, { color: theme.text }]}>
@@ -224,7 +225,7 @@ export default function HistoryScreen() {
                                 styles.setBar, 
                                 { 
                                   width: `${Math.min(100, (set.weight / 150) * 100)}%`,
-                                  backgroundColor: brandColors.primary 
+                                  backgroundColor: BRAND_COLORS.primary 
                                 }
                               ]} />
                             </View>

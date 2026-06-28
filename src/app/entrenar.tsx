@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View, Modal, Image, KeyboardAvoidingView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SymbolView } from 'expo-symbols';
@@ -28,16 +28,19 @@ const INITIAL_WORKOUT: WorkoutSession = {
   exercises: []
 };
 
+// Module-level constants (avoid recreation on every render)
+const BRAND_COLORS = {
+  primary: Colors.light.primary,
+  secondary: Colors.light.secondary,
+  accent: Colors.light.accent,
+  warning: '#FF6B6B',
+} as const;
+
+const MUSCLES = ['Todos', 'Pecho', 'Espalda', 'Piernas', 'Hombros', 'Brazos', 'Core'] as const;
+
 export default function WorkoutScreen() {
   const theme = useTheme();
   const { isMobile, horizontalPadding } = useResponsive();
-
-  const brandColors = {
-    primary: Colors.light.primary, // Purple
-    secondary: Colors.light.secondary, // Black
-    accent: Colors.light.accent, // Purple
-    warning: '#FF6B6B',
-  };
 
   const [secondsElapsed, setSecondsElapsed] = useState(0);
   const [workout, setWorkout] = useState<WorkoutSession>(() => getActiveWorkout());
@@ -47,7 +50,6 @@ export default function WorkoutScreen() {
   const [showAddExerciseModal, setShowAddExerciseModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedMuscle, setSelectedMuscle] = useState('Todos');
-  const muscles = ['Todos', 'Pecho', 'Espalda', 'Piernas', 'Hombros', 'Brazos', 'Core'];
 
   const loadTemplate = (template: WorkoutTemplate) => {
     const newExercises: WorkoutExercise[] = template.exercises.map((templateEx) => {
@@ -96,67 +98,73 @@ export default function WorkoutScreen() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const toggleSetCompleted = (exerciseIndex: number, setIndex: number) => {
-    const updatedWorkout = { ...workout };
-    const set = updatedWorkout.exercises[exerciseIndex].sets[setIndex];
-    set.completed = !set.completed;
-    setWorkout(updatedWorkout);
-  };
+  const toggleSetCompleted = useCallback((exerciseIndex: number, setIndex: number) => {
+    setWorkout(prev => {
+      const updated = JSON.parse(JSON.stringify(prev));
+      updated.exercises[exerciseIndex].sets[setIndex].completed = !updated.exercises[exerciseIndex].sets[setIndex].completed;
+      return updated;
+    });
+  }, []);
 
-  const updateWeight = (exerciseIndex: number, setIndex: number, val: string) => {
+  const updateWeight = useCallback((exerciseIndex: number, setIndex: number, val: string) => {
     const normalized = val.replace(',', '.');
     const num = normalized === '' ? 0 : parseFloat(normalized);
-    const updatedWorkout = { ...workout };
-    updatedWorkout.exercises[exerciseIndex].sets[setIndex].weight = isNaN(num) ? 0 : num;
-    setWorkout(updatedWorkout);
-  };
+    setWorkout(prev => {
+      const updated = JSON.parse(JSON.stringify(prev));
+      updated.exercises[exerciseIndex].sets[setIndex].weight = isNaN(num) ? 0 : num;
+      return updated;
+    });
+  }, []);
 
-  const updateReps = (exerciseIndex: number, setIndex: number, val: string) => {
+  const updateReps = useCallback((exerciseIndex: number, setIndex: number, val: string) => {
     const num = val === '' ? 0 : parseInt(val, 10);
-    const updatedWorkout = { ...workout };
-    updatedWorkout.exercises[exerciseIndex].sets[setIndex].reps = isNaN(num) ? 0 : num;
-    setWorkout(updatedWorkout);
-  };
+    setWorkout(prev => {
+      const updated = JSON.parse(JSON.stringify(prev));
+      updated.exercises[exerciseIndex].sets[setIndex].reps = isNaN(num) ? 0 : num;
+      return updated;
+    });
+  }, []);
 
-  const selectExercise = (exercise: Exercise) => {
+  const selectExercise = useCallback((exercise: Exercise) => {
     const newWorkoutExercise: WorkoutExercise = {
       id: exercise.id,
       name: exercise.name,
       muscleGroup: exercise.muscleGroup,
       sets: [{ setNumber: 1, weight: 0, reps: 0, completed: false }]
     };
-
     setWorkout(prev => ({ ...prev, exercises: [...prev.exercises, newWorkoutExercise] }));
     setSearchQuery('');
     setSelectedMuscle('Todos');
     setShowAddExerciseModal(false);
-  };
+  }, []);
 
-  const addSet = (exerciseIndex: number) => {
-    const updatedWorkout = { ...workout };
-    const exercise = updatedWorkout.exercises[exerciseIndex];
-    const setNumber = exercise.sets.length + 1;
-    const lastSet = exercise.sets[exercise.sets.length - 1];
-    const weight = lastSet ? lastSet.weight : 0;
-    const reps = lastSet ? lastSet.reps : 10;
+  const addSet = useCallback((exerciseIndex: number) => {
+    setWorkout(prev => {
+      const updated = JSON.parse(JSON.stringify(prev));
+      const exercise = updated.exercises[exerciseIndex];
+      const setNumber = exercise.sets.length + 1;
+      const lastSet = exercise.sets[exercise.sets.length - 1];
+      exercise.sets.push({ setNumber, weight: lastSet ? lastSet.weight : 0, reps: lastSet ? lastSet.reps : 10, completed: false });
+      return updated;
+    });
+  }, []);
 
-    exercise.sets.push({ setNumber, weight, reps, completed: false });
-    setWorkout(updatedWorkout);
-  };
+  const removeSet = useCallback((exerciseIndex: number, setIndex: number) => {
+    setWorkout(prev => {
+      const updated = JSON.parse(JSON.stringify(prev));
+      updated.exercises[exerciseIndex].sets.splice(setIndex, 1);
+      updated.exercises[exerciseIndex].sets = updated.exercises[exerciseIndex].sets.map((set: any, idx: number) => ({ ...set, setNumber: idx + 1 }));
+      return updated;
+    });
+  }, []);
 
-  const removeSet = (exerciseIndex: number, setIndex: number) => {
-    const updatedWorkout = { ...workout };
-    const exercise = updatedWorkout.exercises[exerciseIndex];
-    exercise.sets.splice(setIndex, 1);
-    exercise.sets = exercise.sets.map((set, idx) => ({ ...set, setNumber: idx + 1 }));
-    setWorkout(updatedWorkout);
-  };
-
-  const removeExercise = (exerciseIndex: number) => {
-    const updatedWorkout = { ...workout };
-    updatedWorkout.exercises.splice(exerciseIndex, 1);
-    setWorkout(updatedWorkout);
-  };
+  const removeExercise = useCallback((exerciseIndex: number) => {
+    setWorkout(prev => {
+      const updated = JSON.parse(JSON.stringify(prev));
+      updated.exercises.splice(exerciseIndex, 1);
+      return updated;
+    });
+  }, []);
 
   const finishWorkout = () => {
     let totalVolume = 0;
@@ -211,11 +219,11 @@ export default function WorkoutScreen() {
     setShowSuccessModal(false);
   };
 
-  const filteredExercises = MOCK_EXERCISES.filter((exercise) => {
+  const filteredExercises = useMemo(() => MOCK_EXERCISES.filter((exercise) => {
     const matchesSearch = exercise.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesMuscle = selectedMuscle === 'Todos' || exercise.muscleGroup === selectedMuscle;
     return matchesSearch && matchesMuscle;
-  });
+  }), [searchQuery, selectedMuscle]);
 
   const contentPlatformStyle = Platform.select({
     android: { paddingBottom: BottomTabInset + Spacing.four + 60 },
@@ -262,7 +270,7 @@ export default function WorkoutScreen() {
                 {/* Hero Image */}
                 <View style={styles.heroImageWrapper}>
                   <Image
-                    source={require('@/assets/images/workout_hero.png')}
+                    source={require('@/assets/images/workout_hero.webp')}
                     style={styles.heroImage}
                     resizeMode="contain"
                   />
@@ -373,7 +381,7 @@ export default function WorkoutScreen() {
                 onPress={() => { setWorkout(JSON.parse(JSON.stringify(INITIAL_WORKOUT))); setSecondsElapsed(0); }}
                 style={[styles.discardBtn, isMobile && styles.discardBtnMobile]}
               >
-                <SymbolView name={{ ios: 'xmark', android: 'close', web: 'close' }} size={16} tintColor={brandColors.warning} />
+                <SymbolView name={{ ios: 'xmark', android: 'close', web: 'close' }} size={16} tintColor={BRAND_COLORS.warning} />
               </Pressable>
             </View>
 
@@ -386,7 +394,7 @@ export default function WorkoutScreen() {
                       <Text style={styles.exerciseMuscle}>{exercise.muscleGroup}</Text>
                     </View>
                     <Pressable onPress={() => removeExercise(exIndex)}>
-                      <SymbolView name={{ ios: 'trash.fill', android: 'delete', web: 'delete' }} size={18} tintColor={brandColors.warning} />
+                      <SymbolView name={{ ios: 'trash.fill', android: 'delete', web: 'delete' }} size={18} tintColor={BRAND_COLORS.warning} />
                     </Pressable>
                   </View>
 
@@ -399,7 +407,7 @@ export default function WorkoutScreen() {
 
                   {exercise.sets.map((set, setIndex) => (
                     <View key={`${setIndex}-${set.setNumber}`} style={[styles.setRow, isMobile && styles.setRowMobile, set.completed && styles.setRowCompleted]}>
-                      <Text style={[styles.rowSetNum, set.completed && { color: brandColors.primary }]}>{set.setNumber}</Text>
+                      <Text style={[styles.rowSetNum, set.completed && { color: BRAND_COLORS.primary }]}>{set.setNumber}</Text>
 
                       <TextInput
                         style={[styles.inputBox, set.completed && styles.inputBoxCompleted]}
@@ -423,7 +431,7 @@ export default function WorkoutScreen() {
 
                       <Pressable
                         onPress={() => toggleSetCompleted(exIndex, setIndex)}
-                        style={[styles.checkBtn, isMobile && styles.checkBtnMobile, set.completed && { backgroundColor: brandColors.primary }]}
+                        style={[styles.checkBtn, isMobile && styles.checkBtnMobile, set.completed && { backgroundColor: BRAND_COLORS.primary }]}
                       >
                         {set.completed && <SymbolView name={{ ios: 'checkmark', android: 'check', web: 'check' }} size={16} tintColor="#fff" />}
                       </Pressable>
@@ -488,7 +496,7 @@ export default function WorkoutScreen() {
                     <Text style={styles.exItemName}>{ex.name}</Text>
                     <Text style={styles.exItemMuscle}>{ex.muscleGroup}</Text>
                   </View>
-                  <SymbolView name={{ ios: 'plus.circle.fill', android: 'add_circle', web: 'add_circle' }} size={24} tintColor={brandColors.primary} />
+                  <SymbolView name={{ ios: 'plus.circle.fill', android: 'add_circle', web: 'add_circle' }} size={24} tintColor={BRAND_COLORS.primary} />
                 </Pressable>
               ))}
             </ScrollView>
@@ -500,7 +508,7 @@ export default function WorkoutScreen() {
       <Modal animationType="fade" transparent={true} visible={showSuccessModal} onRequestClose={() => setShowSuccessModal(false)}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContentCentered}>
-            <SymbolView name={{ ios: 'trophy.fill', android: 'emoji_events', web: 'emoji_events' }} size={64} tintColor={brandColors.primary} />
+            <SymbolView name={{ ios: 'trophy.fill', android: 'emoji_events', web: 'emoji_events' }} size={64} tintColor={BRAND_COLORS.primary} />
             <Text style={styles.successTitle}>¡Completado!</Text>
             <Text style={styles.successDesc}>Gran trabajo hoy.</Text>
             <View style={styles.statsGrid}>

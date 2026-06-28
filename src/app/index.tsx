@@ -21,12 +21,6 @@ export default function HomeScreen() {
   const theme = useTheme();
   const { isMobile, screenWidth, horizontalPadding } = useResponsive();
 
-  const brandColors = {
-    primary: Colors.light.primary, // Purple
-    secondary: Colors.light.secondary, // Black
-    accent: Colors.light.accent, // Purple
-  };
-
   const contentPlatformStyle = Platform.select({
     android: { paddingBottom: BottomTabInset + Spacing.four + 60 },
     ios: { paddingBottom: BottomTabInset + Spacing.four + 60 },
@@ -159,7 +153,7 @@ export default function HomeScreen() {
               <View style={[styles.heroCard, isMobile && { height: 220, padding: 16 }]}>
                 {/* Hero Background */}
                 <Image
-                  source={require('@/assets/images/workout_hero.png')}
+                  source={require('@/assets/images/workout_hero.webp')}
                   style={[StyleSheet.absoluteFill, { width: '100%', height: '100%' }]}
                 />
                 <LinearGradient

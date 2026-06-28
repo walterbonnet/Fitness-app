@@ -16,17 +16,18 @@ import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { useResponsive } from '@/hooks/use-responsive';
 import { getRestTimerDuration, updateRestTimerDuration } from '@/constants/mockData';
 
+// Module-level constant (avoid recreation on every render)
+const BRAND_COLORS = {
+  primary: '#A3E635', // Neon Green
+  secondary: '#00F0FF', // Cyan
+  warning: '#FF6B6B', // Coral Red
+  accent: '#A855F7', // Purple
+} as const;
+
 export default function RestTimerScreen() {
   const theme = useTheme();
   const { isMobile, screenWidth, horizontalPadding } = useResponsive();
   
-  // Design colors
-  const brandColors = {
-    primary: '#A3E635', // Neon Green
-    secondary: '#00F0FF', // Cyan
-    warning: '#FF6B6B', // Coral Red
-    accent: '#A855F7', // Purple
-  };
 
   // Timer states
   const [initialTime, setInitialTime] = useState(() => getRestTimerDuration()); // default 90s
@@ -159,7 +160,7 @@ export default function RestTimerScreen() {
               styles.timerRing, 
               { 
                 borderColor: theme.backgroundSelected,
-                shadowColor: isActive ? brandColors.warning : 'transparent',
+                shadowColor: isActive ? BRAND_COLORS.warning : 'transparent',
                 ...(isMobile ? { width: Math.min(220, screenWidth * 0.55), height: Math.min(220, screenWidth * 0.55), borderRadius: Math.min(110, screenWidth * 0.275) } : {}),
               }
             ]}>
@@ -167,7 +168,7 @@ export default function RestTimerScreen() {
               <View style={[
                 styles.timerProgressBorder, 
                 { 
-                  borderColor: isActive ? brandColors.warning : brandColors.primary,
+                  borderColor: isActive ? BRAND_COLORS.warning : BRAND_COLORS.primary,
                   transform: [{ rotate: `${progress * 360}deg` }],
                   opacity: 0.8
                 }
@@ -179,7 +180,7 @@ export default function RestTimerScreen() {
               
               <Text style={[
                 styles.timerStatus, 
-                { color: timeLeft === 0 ? brandColors.warning : theme.textSecondary }
+                { color: timeLeft === 0 ? BRAND_COLORS.warning : theme.textSecondary }
               ]}>
                 {timeLeft === 0 ? '¡TIEMPO COMPLETADO!' : isActive ? 'ENTRENANDO DESCANSO...' : 'PAUSADO'}
               </Text>
@@ -192,7 +193,7 @@ export default function RestTimerScreen() {
               styles.progressBar, 
               { 
                 width: `${progress * 100}%`,
-                backgroundColor: isActive ? brandColors.warning : brandColors.primary 
+                backgroundColor: isActive ? BRAND_COLORS.warning : BRAND_COLORS.primary 
               }
             ]} />
           </View>
@@ -210,7 +211,7 @@ export default function RestTimerScreen() {
               <SymbolView 
                 name={{ ios: 'plus', android: 'add', web: 'add' }} 
                 size={14} 
-                tintColor={brandColors.primary} 
+                tintColor={BRAND_COLORS.primary} 
               />
               <Text style={[styles.quickAdjustText, { color: theme.text }]}>+30s</Text>
             </Pressable>
@@ -225,7 +226,7 @@ export default function RestTimerScreen() {
               <SymbolView 
                 name={{ ios: 'plus', android: 'add', web: 'add' }} 
                 size={14} 
-                tintColor={brandColors.primary} 
+                tintColor={BRAND_COLORS.primary} 
               />
               <Text style={[styles.quickAdjustText, { color: theme.text }]}>+1 min</Text>
             </Pressable>
@@ -240,7 +241,7 @@ export default function RestTimerScreen() {
                   styles.presetChip,
                   { 
                     backgroundColor: initialTime === preset.value 
-                      ? brandColors.primary 
+                      ? BRAND_COLORS.primary 
                       : theme.backgroundElement,
                     borderColor: initialTime === preset.value
                       ? 'transparent'
@@ -276,7 +277,7 @@ export default function RestTimerScreen() {
             <SymbolView 
               name={{ ios: 'timer', android: 'timer', web: 'timer' }} 
               size={18} 
-              tintColor={brandColors.secondary} 
+              tintColor={BRAND_COLORS.secondary} 
             />
             <Text style={[styles.customTimeButtonText, { color: theme.text }]}>Ajustar Tiempo Personalizado</Text>
           </Pressable>
@@ -306,7 +307,7 @@ export default function RestTimerScreen() {
               style={({ pressed }) => [
                 styles.controlButton,
                 styles.playButton,
-                { backgroundColor: isActive ? brandColors.warning : brandColors.primary },
+                { backgroundColor: isActive ? BRAND_COLORS.warning : BRAND_COLORS.primary },
                 pressed && styles.pressed
               ]}
               onPress={handlePlayPause}
@@ -369,7 +370,7 @@ export default function RestTimerScreen() {
               <Pressable
                 style={({ pressed }) => [
                   styles.modalActionButton,
-                  { backgroundColor: brandColors.primary },
+                  { backgroundColor: BRAND_COLORS.primary },
                   pressed && styles.pressed
                 ]}
                 onPress={handleSetCustomTime}

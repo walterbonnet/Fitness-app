@@ -16,22 +16,22 @@ import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
 import { useResponsive } from '@/hooks/use-responsive';
 import { MOCK_EXERCISES, Exercise } from '@/constants/mockData';
 
+// Module-level constant (avoid recreation on every render)
+const BRAND_COLORS = {
+  primary: '#A3E635',
+  secondary: '#00F0FF',
+  accent: '#A855F7',
+  warning: '#FF6B6B',
+  difficulty: {
+    Principiante: '#22C55E',
+    Intermedio: '#F59E0B',
+    Avanzado: '#EF4444',
+  }
+} as const;
+
 export default function ExercisesScreen() {
   const theme = useTheme();
   const { horizontalPadding } = useResponsive();
-
-  // Design colors
-  const brandColors = {
-    primary: '#A3E635', // Neon Green
-    secondary: '#00F0FF', // Cyan
-    accent: '#A855F7', // Purple
-    warning: '#FF6B6B', // Coral
-    difficulty: {
-      Principiante: '#22C55E', // Green
-      Intermedio: '#F59E0B', // Amber
-      Avanzado: '#EF4444', // Red
-    }
-  };
 
   // State
   const [searchQuery, setSearchQuery] = useState('');
@@ -120,7 +120,7 @@ export default function ExercisesScreen() {
                   style={({ pressed }) => [
                     styles.filterChip,
                     { 
-                      backgroundColor: selectedMuscle === muscle ? brandColors.primary : theme.backgroundElement,
+                      backgroundColor: selectedMuscle === muscle ? BRAND_COLORS.primary : theme.backgroundElement,
                       borderColor: selectedMuscle === muscle ? 'transparent' : theme.backgroundSelected
                     },
                     pressed && styles.pressed
@@ -152,7 +152,7 @@ export default function ExercisesScreen() {
                   style={({ pressed }) => [
                     styles.filterChip,
                     { 
-                      backgroundColor: selectedEquipment === equip ? brandColors.secondary : theme.backgroundElement,
+                      backgroundColor: selectedEquipment === equip ? BRAND_COLORS.secondary : theme.backgroundElement,
                       borderColor: selectedEquipment === equip ? 'transparent' : theme.backgroundSelected
                     },
                     pressed && styles.pressed
@@ -191,10 +191,10 @@ export default function ExercisesScreen() {
                   
                   <View style={styles.badgeRow}>
                     <View style={[styles.badge, { backgroundColor: theme.backgroundSelected }]}>
-                      <Text style={[styles.badgeText, { color: brandColors.primary }]}>{exercise.muscleGroup}</Text>
+                      <Text style={[styles.badgeText, { color: BRAND_COLORS.primary }]}>{exercise.muscleGroup}</Text>
                     </View>
                     <View style={[styles.badge, { backgroundColor: theme.backgroundSelected }]}>
-                      <Text style={[styles.badgeText, { color: brandColors.secondary }]}>{exercise.equipment}</Text>
+                      <Text style={[styles.badgeText, { color: BRAND_COLORS.secondary }]}>{exercise.equipment}</Text>
                     </View>
                   </View>
                 </View>
@@ -203,11 +203,11 @@ export default function ExercisesScreen() {
                   {/* Difficulty Tag */}
                   <View style={[
                     styles.difficultyTag, 
-                    { backgroundColor: brandColors.difficulty[exercise.difficulty] + '15' }
+                    { backgroundColor: BRAND_COLORS.difficulty[exercise.difficulty] + '15' }
                   ]}>
                     <Text style={[
                       styles.difficultyText, 
-                      { color: brandColors.difficulty[exercise.difficulty] }
+                      { color: BRAND_COLORS.difficulty[exercise.difficulty] }
                     ]}>
                       {exercise.difficulty}
                     </Text>
@@ -254,18 +254,18 @@ export default function ExercisesScreen() {
                     <Text style={[styles.modalTitle, { color: theme.text }]}>{selectedExercise.name}</Text>
                     <View style={styles.modalBadgeRow}>
                       <View style={[styles.badge, { backgroundColor: theme.backgroundSelected }]}>
-                        <Text style={[styles.badgeText, { color: brandColors.primary }]}>{selectedExercise.muscleGroup}</Text>
+                        <Text style={[styles.badgeText, { color: BRAND_COLORS.primary }]}>{selectedExercise.muscleGroup}</Text>
                       </View>
                       <View style={[styles.badge, { backgroundColor: theme.backgroundSelected }]}>
-                        <Text style={[styles.badgeText, { color: brandColors.secondary }]}>{selectedExercise.equipment}</Text>
+                        <Text style={[styles.badgeText, { color: BRAND_COLORS.secondary }]}>{selectedExercise.equipment}</Text>
                       </View>
                       <View style={[
                         styles.badge, 
-                        { backgroundColor: brandColors.difficulty[selectedExercise.difficulty] + '15' }
+                        { backgroundColor: BRAND_COLORS.difficulty[selectedExercise.difficulty] + '15' }
                       ]}>
                         <Text style={[
                           styles.badgeText, 
-                          { color: brandColors.difficulty[selectedExercise.difficulty] }
+                          { color: BRAND_COLORS.difficulty[selectedExercise.difficulty] }
                         ]}>
                           {selectedExercise.difficulty}
                         </Text>
@@ -305,7 +305,7 @@ export default function ExercisesScreen() {
                       <View style={styles.muscleRoleItem}>
                         <Text style={[styles.muscleRoleLabel, { color: theme.textSecondary }]}>Principal:</Text>
                         <View style={[styles.badge, { backgroundColor: theme.backgroundSelected, alignSelf: 'flex-start' }]}>
-                          <Text style={[styles.badgeText, { color: brandColors.primary }]}>
+                          <Text style={[styles.badgeText, { color: BRAND_COLORS.primary }]}>
                             {selectedExercise.muscleGroup}
                           </Text>
                         </View>
@@ -336,7 +336,7 @@ export default function ExercisesScreen() {
                           <SymbolView 
                             name={{ ios: 'checkmark.circle.fill', android: 'check_circle', web: 'check_circle' }} 
                             size={14} 
-                            tintColor={brandColors.secondary} 
+                            tintColor={BRAND_COLORS.secondary} 
                           />
                           <Text style={[styles.benefitText, { color: theme.text }]}>{benefit}</Text>
                         </View>
@@ -349,7 +349,7 @@ export default function ExercisesScreen() {
                     <Text style={[styles.sectionHeading, { color: theme.textSecondary }]}>INSTRUCCIONES DE EJECUCIÓN</Text>
                     {selectedExercise.instructions.map((step, index) => (
                       <View key={index} style={styles.stepRow}>
-                        <View style={[styles.stepNumCircle, { backgroundColor: brandColors.primary }]}>
+                        <View style={[styles.stepNumCircle, { backgroundColor: BRAND_COLORS.primary }]}>
                           <Text style={styles.stepNumText}>{index + 1}</Text>
                         </View>
                         <Text style={[styles.stepText, { color: theme.text }]}>{step}</Text>
